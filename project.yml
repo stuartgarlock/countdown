@@ -1,0 +1,117 @@
+# Generated project. Regenerate after adding or moving files:
+#     xcodegen generate && open Countdown.xcodeproj
+#
+# Build, test and install commands are in README.md.
+name: Countdown
+options:
+  bundleIdPrefix: llc.smggroup
+  deploymentTarget:
+    iOS: "18.0"
+  createIntermediateGroups: true
+settings:
+  base:
+    MARKETING_VERSION: "1.0.0"
+    CURRENT_PROJECT_VERSION: "1"
+    SWIFT_VERSION: "5.0"
+    DEVELOPMENT_TEAM: L74T4HTUQW
+    CODE_SIGN_STYLE: Automatic
+    ENABLE_USER_SCRIPT_SANDBOXING: NO
+targets:
+  Countdown:
+    type: application
+    platform: iOS
+    sources:
+      - path: App
+        excludes:
+          - "Info.plist"
+      - path: Shared
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: llc.smggroup.countdown
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: Countdown
+        INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.lifestyle
+        # No networking at all, so no export-compliance question on every upload.
+        INFOPLIST_KEY_ITSAppUsesNonExemptEncryption: NO
+        INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone: UIInterfaceOrientationPortrait
+        INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad: "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight"
+        TARGETED_DEVICE_FAMILY: "1,2"
+    # Merged with the generated keys above. Only here for the countdown:// scheme, which a widget
+    # tap uses to open straight to its event.
+    info:
+      path: App/Info.plist
+      properties:
+        CFBundleURLTypes:
+          - CFBundleURLName: llc.smggroup.countdown
+            CFBundleURLSchemes: [countdown]
+    # The app and the widget read the same events.json through this group.
+    entitlements:
+      path: App/Countdown.entitlements
+      properties:
+        com.apple.security.application-groups:
+          - group.llc.smggroup.countdown
+    dependencies:
+      - target: CountdownWidget
+        embed: true
+    scheme:
+      testTargets:
+        - CountdownTests
+        - CountdownUITests
+
+  CountdownWidget:
+    type: app-extension
+    platform: iOS
+    sources:
+      - path: Widget
+        excludes:
+          - "Info.plist"
+      - path: Shared
+    info:
+      path: Widget/Info.plist
+      properties:
+        CFBundleDisplayName: Countdown
+        # An extension's version must match its app's, or iOS will not register it.
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.widgetkit-extension
+    entitlements:
+      path: Widget/CountdownWidget.entitlements
+      properties:
+        com.apple.security.application-groups:
+          - group.llc.smggroup.countdown
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: llc.smggroup.countdown.widget
+        TARGETED_DEVICE_FAMILY: "1,2"
+        GENERATE_INFOPLIST_FILE: NO
+
+  # Tests the date maths on its own, with no app host: the model file is compiled straight in.
+  CountdownTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - path: Tests
+      - path: Shared/CountdownEvent.swift
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: llc.smggroup.countdown.tests
+        GENERATE_INFOPLIST_FILE: YES
+
+  # Taps through the app in the simulator; also produces the App Store screenshots.
+  CountdownUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - path: UITests
+    dependencies:
+      - target: Countdown
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: llc.smggroup.countdown.uitests
+        GENERATE_INFOPLIST_FILE: YES
+        TEST_TARGET_NAME: Countdown
