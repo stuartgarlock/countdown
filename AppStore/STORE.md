@@ -8,7 +8,7 @@ Everything App Store Connect asks for, ready to paste. Screenshots are in `scree
 | Field | Value |
 |---|---|
 | Platform | iOS |
-| Name | _to choose; must be unique on the store, max 30 characters. "Countdown" alone is taken._ |
+| Name | `Countdown - Big Days` |
 | Primary language | English (U.S.) |
 | Bundle ID | `llc.smggroup.countdown` |
 | SKU | `countdown-ios` |
